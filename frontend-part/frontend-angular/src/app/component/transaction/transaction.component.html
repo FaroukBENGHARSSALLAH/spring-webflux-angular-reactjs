@@ -1,0 +1,17 @@
+<h3>Companies List</h3>
+<div class="row">
+  <div class="col-md-6"  >
+	  <div *ngFor="let company of companies">
+	    <div>
+	      <h4>{{company.symbol}} : {{company.name}}</h4>
+	      <button class="btn btn-info" (click)="fetch(company)" type="button" >
+	         check variations
+	      </button>
+	    </div>
+	  </div>
+  </div>
+    <div class="col-md-6"  >
+	        <h4>Transactions List</h4>
+           <div  width="500"  height="300"  dataFormat="json"  type="realtimeline"  [dataSource]="data" ></div>',
+	  </div>
+  </div>
