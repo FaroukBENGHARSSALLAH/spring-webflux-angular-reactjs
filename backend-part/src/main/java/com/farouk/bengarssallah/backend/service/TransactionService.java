@@ -9,8 +9,8 @@ public interface TransactionService {
 	
 	  public Mono<Transaction> addTransaction(Transaction transaction);
 	  public Mono<Transaction> updatTransaction(Transaction transaction);
-	  public Mono<Void> deleteTransaction(long idTransaction);
-	  public Mono<Transaction> findTransaction(long idTransaction);
+	  public Mono<Void> deleteTransaction(String reference);
+	  public Mono<Transaction> findTransaction(String reference);
 	  public Flux<Transaction> findAllTransactions();
 	  
 	

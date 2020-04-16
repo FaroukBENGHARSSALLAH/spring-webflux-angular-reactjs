@@ -1,8 +1,7 @@
 package com.farouk.bengarssallah.backend.controller;
 
 import java.time.Duration;
-import java.time.Instant;
-import java.util.List;
+import java.time.LocalDateTime;
 import java.util.stream.Stream;
 
 import org.springframework.http.HttpStatus;
@@ -46,28 +45,28 @@ public class ReactiveRestController {
 		return companyService.findAllCompanies();
 	}
 	
-	@GetMapping(value = "/companies/{id}")
+	@GetMapping(value = "/companies/{symbol}")
 	@ResponseStatus(HttpStatus.OK)
-	public Mono<Company> getCompany(@PathVariable long id) {
-		return companyService.findCompany(id);
+	public Mono<Company> getCompany(@PathVariable String symbol) {
+		return companyService.findBySymbol(symbol);
 	}
 	
 	
-	@GetMapping(value = "/transatcions", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+	@GetMapping(value = "/transactions", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
 	public Flux<Transaction> getTransactions() {
 		return transatcionService.findAllTransactions();
 	}
 	
-	@GetMapping(value = "/transatcions/{id}")
+	@GetMapping(value = "/transactions/{symbol}")
 	@ResponseStatus(HttpStatus.OK)
-	public Mono<Transaction> getTransaction(@PathVariable long id) {
-		return transatcionService.findTransaction(id);
+	public Mono<Transaction> getTransaction(@PathVariable String symbol) {
+		return transatcionService.findTransaction(symbol);
 	}
 	
-	@GetMapping(value = "/companies/{id}/transatcions")
+	@GetMapping(value = "/companies/{symbol}/transactions",produces = MediaType.TEXT_EVENT_STREAM_VALUE)
 	@ResponseStatus(HttpStatus.OK)
-	public Flux<Transaction> getTransactionForCompany(@PathVariable long id) {
-		return companyService.findTransactionsByidCompany(id);
+	public Flux<Transaction> getTransactionForCompany(@PathVariable String symbol) {
+		return companyService.findTransactionsByidCompany(symbol);
 	}
 	
 	@PostMapping("/companies")
@@ -76,17 +75,17 @@ public class ReactiveRestController {
 		return companyService.addCompany(company);
     }
 	
-	@PutMapping(value = "/companies/{id}")
+	@PutMapping(value = "/companies/{symbol}")
 	@ResponseStatus(HttpStatus.OK)
-	public Mono<Company> updateCompany(@PathVariable long id, @RequestBody Company company) {
-		company.setId(id);
+	public Mono<Company> updateCompany(@PathVariable String symbol, @RequestBody Company company) {
+		company.setSymbol(symbol);
 		return companyService.updateCompany(company);
 	}
 	
-	@DeleteMapping(value = "/companies/{id}")
+	@DeleteMapping(value = "/companies/{symbol}")
 	@ResponseStatus(HttpStatus.OK)
-    public Mono<Void> deleteCompany(@PathVariable long id){
-        return companyService.deleteCompany(id);
+    public Mono<Void> deleteCompany(@PathVariable String symbol){
+        return companyService.deleteCompany(symbol);
     }
 	
 	
@@ -94,34 +93,33 @@ public class ReactiveRestController {
     public Mono<Transaction> addTransaction(@RequestBody Transaction transaction){
         return transatcionService.addTransaction(transaction);
     }
-    @DeleteMapping(value = "/transactions/{id}")
-    public Mono<Void> deleteTransaction(@PathVariable long idTransaction){
-        return transatcionService.deleteTransaction(idTransaction);
+    @DeleteMapping(value = "/transactions/{symbol}")
+    public Mono<Void> deleteTransaction(@PathVariable String reference){
+        return transatcionService.deleteTransaction(reference);
     }
-    @PutMapping("/transactions/{id}")
-    public Mono<Transaction> updateTransaction(@RequestBody Transaction transaction, @PathVariable long id){
-        transaction.setId(id);
+    @PutMapping("/transactions/{reference}")
+    public Mono<Transaction> updateTransaction(@RequestBody Transaction transaction, @PathVariable String reference){
+        transaction.setReference(reference);
         return transatcionService.updatTransaction(transaction);
     }
 
-    @GetMapping(value = "/transactions/stream",produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public Flux<Transaction> streamTransactions(){
-        return transatcionService.findAllTransactions();
-    }
+   
 
-    @GetMapping(value = "/transactions/stream/{id}",produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public Flux<Transaction> stream(@PathVariable long id){
-        return transatcionService.findTransaction(id).flatMapMany(soc->{
+    @GetMapping(value = "/companies/transactions/stream/{symbol}",produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public Flux<Transaction> stream(@PathVariable String symbol){
+        return companyService.findBySymbol(symbol).flatMapMany( c ->{
         	
             Flux<Long> interval=Flux.interval(Duration.ofMillis(1000));
             Flux<Transaction> transactionFlux= Flux.fromStream(Stream.generate(()->{
                 Transaction transaction=new Transaction();
-                transaction.setInstant(Instant.now());
-                transaction.setPrice(soc.getPrice()*(1+(Math.random()*12-6)/100));
+                transaction.setCreationDate(LocalDateTime.now());
+                transaction.setCompany(c);
+                transaction.setReference("TR"+(10+Math.random()*90));
+                transaction.setPrice(1+(Math.random()*12-6)/100);
                 return transaction;
             }));
             
-            return Flux.zip(interval,transactionFlux)
+            return Flux.zip(interval, transactionFlux)
                     .map(data->{
                         return data.getT2();
                     }).share();

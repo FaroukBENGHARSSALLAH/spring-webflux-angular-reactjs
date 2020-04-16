@@ -28,13 +28,13 @@ public class TransactionServiceImplementaion implements TransactionService {
 	}
 
 	@Override
-	public Mono<Void> deleteTransaction(long idTransaction) {
-		return transactionRepository.deleteById(idTransaction);
+	public Mono<Void> deleteTransaction(String reference) {
+		return transactionRepository.deleteById(reference);
 	}
 
 	@Override
-	public Mono<Transaction> findTransaction(long idTransaction) {
-		return transactionRepository.findById(idTransaction);
+	public Mono<Transaction> findTransaction(String reference) {
+		return transactionRepository.findById(reference);
 	}
 
 	@Override

@@ -4,7 +4,7 @@ import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
 
 import com.farouk.bengarssallah.backend.domain.Transaction;
 
-public interface TransactionRepository extends ReactiveMongoRepository<Transaction, Long> {
+public interface TransactionRepository extends ReactiveMongoRepository<Transaction, String> {
 
 
 }

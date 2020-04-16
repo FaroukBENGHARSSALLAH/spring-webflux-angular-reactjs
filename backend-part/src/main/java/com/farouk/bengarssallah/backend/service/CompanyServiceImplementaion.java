@@ -1,7 +1,5 @@
 package com.farouk.bengarssallah.backend.service;
 
-import java.util.List;
-
 import org.springframework.stereotype.Service;
 
 import com.farouk.bengarssallah.backend.domain.Company;
@@ -31,13 +29,18 @@ public class CompanyServiceImplementaion implements CompanyService {
 	}
 
 	@Override
-	public Mono<Void> deleteCompany(long idCompany) {
-		return companyRepository.deleteById(idCompany);
+	public Mono<Void> deleteCompany(String symbol) {
+		return companyRepository.deleteById(symbol);
 	}
 
 	@Override
-	public Mono<Company> findCompany(long idCompany) {
-		return companyRepository.findById(idCompany);
+	public Mono<Company> findCompany(String symbol) {
+		return companyRepository.findById(symbol);
+	}
+	
+	@Override
+	public Mono<Company> findBySymbol(String symbol) {
+		return companyRepository.findBySymbol(symbol);
 	}
 
 	@Override
@@ -46,9 +49,11 @@ public class CompanyServiceImplementaion implements CompanyService {
 	}
 
 	@Override
-	public Flux<Transaction> findTransactionsByidCompany(long idCompany) {
-	return companyRepository.findTransactionsByidCompany(idCompany);
+	public Flux<Transaction> findTransactionsByidCompany(String symbol) {
+	return companyRepository.findTransactionsByidCompany(symbol);
 	}
+
+	
 
 	
 }
