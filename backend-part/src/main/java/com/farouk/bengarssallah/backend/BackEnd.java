@@ -38,7 +38,7 @@ public class BackEnd {
     	
         return args->{
                 Stream.of("MNA","QAI","WTMF","FTLS", "JPHF").forEach(s->{
-                	companyRepository.save(new Company(s, s + "Tracker ETF",(10000+Math.random()*900), LocalDateTime.now()))
+                	companyRepository.save(new Company(s, s + "Tracker ETF",(10000+Math.random()*900), (1000+Math.random()*500), LocalDateTime.now()))
                             .subscribe(soc->{
                                 System.out.println(soc.toString());
                             });

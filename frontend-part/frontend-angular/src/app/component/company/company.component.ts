@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Company } from '../models/company.model';
-import { CompanyService } from '../services/company.service';
+import { Company } from '.../models/company.model';
+import { CompanyService } from '.../services/company.service';
 
 
 @Component({
@@ -12,7 +12,7 @@ export class CompanyComponent implements OnInit {
 
    private company: Company;	 
    private symbol: string = '';	
-   private companies: company[];
+   private companies: Company[];
    
   constructor(private companyService:CompanyService) { }
 

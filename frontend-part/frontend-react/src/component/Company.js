@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import axios from 'axios';
+import Transaction from './Transaction';
 
 
 class Company extends Component {
@@ -58,7 +59,6 @@ class Company extends Component {
 			    symbol : '', 
 				company : null
 				});
-		 
 		 const innerv =  (<div>
 						<div className="table-reponsive">
 							<table className="table table-borderless">
@@ -88,7 +88,6 @@ class Company extends Component {
 						</div>
 						</div>);						
 				  this.setState({content: innerv});
-             });
        }	   
 	   
 	   
@@ -104,7 +103,9 @@ class Company extends Component {
 								      <button type="button"  className="btn btn-outline-info btn-sm"    onClick={() => this.back()} >
 										 <i className="fa fa-step-backward" ></i>
 									 </button>
-								   </div><br/><br/>
+								   </div><br/>
+								   <br/>
+								   <div  className="col-md-4 col-lg-4"  > 
 								   <div className="card" >
 									  <div className="card-body">
 										<h5 className="card-title float-left">{this.state.company.symbol}</h5>
@@ -116,8 +117,16 @@ class Company extends Component {
 											<p className="card-text">1 Day Flow : <span   className={(this.state.company.day1Flow > 0)  ?  "grennvl" : "redvl"}  >{this.state.company.day1Flow} </span> $</p>
 										</div>
 									  </div>
+									 </div>
 									</div>
 									<br/>
+									<div  className="col-md-8 col-lg-8"  >
+									 <div  className="card"  >
+									    <div  className="card-body"  >
+										    <Transaction   symbol={this.state.symbol} />
+									     </div>
+									  </div>
+							        </div>
 								   <div  className="float-right">
 								      <button type="button"  className="btn btn-outline-info btn-sm"  onClick={() => this.back()} >
 										 <i className="fa fa-step-backward" ></i>

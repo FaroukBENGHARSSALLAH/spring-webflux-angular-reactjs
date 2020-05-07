@@ -1,7 +1,7 @@
      <div>
 		 <br/><br/><br/><br/>
 		 <div  class="container"  >
-			 <div  class="row"  >
+			 <div class="row"  >
 				   <div  class="col-md-1 col-lg-1"  >  </div>
 				   <div  class="col-md-10 col-lg-10"  >
 						 <div  *ngIf="etfs && !etf" class="card"  >
@@ -40,17 +40,24 @@
 										 <i class="fa fa-step-backward" ></i>
 									 </button>
 								   </div><br/><br/>
-								   <div class="card" >
-									  <div class="card-body">
-										<h5 class="card-title float-left">{{company.symbol}}</h5>
-										<br/>
-										<div class="float-left" >
-											<p class="card-text">Name : {{company.name}}</p>
-											<p class="card-text">Exchange : {{company.exchange}}</p>
-											<p class="card-text">Volume : {{company.volume}}  $</p>
-											<p class="card-text">1 Day Flow : <span   [ngClass]="(etf.day1Flow > 0) ? 'grennvl' : 'redvl'"  >{{company.day1Flow}} </span> $</p>
+								    <div class="row"  >
+									     <div  class="col-md-6 col-lg-6"  >  
+										   <div class="card" >
+											  <div class="card-body">
+												<h5 class="card-title float-left">{{company.symbol}}</h5>
+												<br/>
+												<div class="float-left" >
+													<p class="card-text">Name : {{company.name}}</p>
+													<p class="card-text">Exchange : {{company.exchange}}</p>
+													<p class="card-text">Volume : {{company.volume}}  $</p>
+													<p class="card-text">1 Day Flow : <span   [ngClass]="(etf.day1Flow > 0) ? 'grennvl' : 'redvl'"  >{{company.day1Flow}} </span> $</p>
+												</div>
+											  </div>
+											</div>
 										</div>
-									  </div>
+										<div  class="col-md-6 col-lg-6"  > 
+												   <app-transaction></app-transaction>
+										</div>
 									</div>
 									<br/>
 								   <div  class="float-right">
