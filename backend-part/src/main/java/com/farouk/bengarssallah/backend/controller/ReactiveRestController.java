@@ -117,14 +117,23 @@ public class ReactiveRestController {
                 transaction.setCreationDate(LocalDateTime.now());
                 transaction.setCompany(c);
                 transaction.setReference("TR"+(10+Math.random()*90));
-                transaction.setPrice(1+(Math.random()*12-6)/100);
+                transaction.setPrice(c.getDay1Flow() + (     
+                		   
+                		(Math.floor((Math.random() * 2)) > 0 ? 1 : -1) * 1+(Math.random()*12-6)/100)
+                		);
                 return transaction;
             }));
             
             return Flux.zip(interval, transactionFlux)
                     .map(data->{
+                    	System.out.println("generating stream of " + data.getT2().getPrice());
+                    	transactionFlux.doOnCancel(() -> System.out.println("client terminated"));
+                    	transactionFlux.doOnTerminate(() -> System.out.println("client terminated"));
                         return data.getT2();
-                    }).share();
+                    }).doOnCancel(() -> System.out.println("client cancelled"))
+                      .doOnTerminate(() -> System.out.println("client terminated"))
+                      .doFinally(s -> System.out.println("client finsished"))
+                      .share();
         });
     }
 

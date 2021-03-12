@@ -1,6 +1,12 @@
 package com.farouk.bengarssallah.backend;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,26 +38,34 @@ public class BackEnd {
     
     
     
-    
-    @Bean
+
+   @Bean
     CommandLineRunner start(CompanyRepository companyRepository, TransactionRepository transactionRepository){
-    	
+    	Map<String, String> map = new HashMap<>();
+    	map.put("DIA", "SPDR Dow Jones Industrial Average ETF");
+    	map.put("AGG", "iShares Core US Aggregate Bond ETF");
+    	map.put("ASHR", "Deutsche X-trackers Harvest CSI300 CHN A");
+    	map.put("AMJ", "JPMorgan Alerian MLP ETN");
+    	map.put("XME", "SPDR S&P Metals and Mining ETF");
         return args->{
-                Stream.of("MNA","QAI","WTMF","FTLS", "JPHF").forEach(s->{
-                	companyRepository.save(new Company(s, s + "Tracker ETF",(10000+Math.random()*900), (1000+Math.random()*500), LocalDateTime.now()))
+                Stream.of("DIA","AGG","ASHR","AMJ", "XME").forEach(s->{
+                	companyRepository.save(new Company(s, map.get(s), "PCX",
+                			new BigDecimal((10000+Math.random()*900)).setScale(2, RoundingMode.HALF_UP).doubleValue(),
+                			new BigDecimal((10+Math.random()*900)).setScale(2, RoundingMode.HALF_UP).doubleValue(), 
+                			LocalDateTime.now()))
                             .subscribe(soc->{
                                 System.out.println(soc.toString());
                             });
                 });
                transactionRepository.deleteAll().subscribe(null,null,()->{
-                   Stream.of("MNA","QAI","WTMF","FTLS", "JPHF").forEach(s->{
+                   Stream.of("DIA","AGG","ASHR","AMJ", "XME").forEach(s->{
                 	   companyRepository.findBySymbol(s).subscribe(c ->{
                            for (int i = 0; i <10 ; i++) {
                                Transaction transaction=new Transaction();
                                transaction.setCreationDate(LocalDateTime.now());
                                transaction.setReference("TR"+(10+Math.random()*90));
                                transaction.setCompany(c);
-                               transaction.setPrice(1+(Math.random()*12-6)/100);
+                               transaction.setPrice(c.getDay1Flow() + new BigDecimal((10+Math.random()*900)).setScale(2, RoundingMode.HALF_UP).doubleValue());
                                transactionRepository.save(transaction).subscribe(t -> {
                                    System.out.println(t.toString());
                                  });
@@ -62,8 +76,8 @@ public class BackEnd {
                });
             System.out.println("......");
 
-        };
-    }
+        };  
+    } 
     
 }
 	

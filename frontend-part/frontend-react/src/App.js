@@ -5,12 +5,10 @@ import './App.css';
 
 class App extends Component {
      render(){
-			  return (<div  className="container"  >
-					     <div  className="row" style={{ marginTop: "5%" }} >
-						    <Navbar />
-					        <Company />
-					    </div>
-					   </div>	
+			  return (<div className="App"  >
+						         <Navbar />
+					             <Company />
+					 </div>
 			        );
            }
 }
