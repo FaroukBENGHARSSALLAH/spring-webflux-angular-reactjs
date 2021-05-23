@@ -26,6 +26,21 @@
   color: #61dafb;
 }
 
+.padding-nauth{
+	    margin-top: 30%;
+   }
+   
+.grennvl{
+	color: green;
+	
+   }
+   
+   
+   .redvl{
+	   color: red;
+   }
+      
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);

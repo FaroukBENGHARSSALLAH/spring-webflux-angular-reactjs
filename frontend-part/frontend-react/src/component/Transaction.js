@@ -128,6 +128,7 @@ class Transaction extends Component {
 			
 			this.dispose = () =>  {
                      chart.dispose();
+					 eventSource.close();
 			};			
 						  
 	          }
@@ -136,6 +137,7 @@ class Transaction extends Component {
 	   
 	   
 	    componentWillUnmount() {
+			  this.dispose();
        }
    
    

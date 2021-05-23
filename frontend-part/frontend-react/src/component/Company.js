@@ -121,7 +121,7 @@ class Company extends Component {
 											<div  className="col-md-8 col-lg-8"  >
 											 <div  className="card"  >
 												<div  className="card-body"  >
-													<Transaction price={this.state.company.day1Flow}  symbol={this.state.company.symbol} />
+													<Transaction price={this.state.company.day1Flow}  symbol={this.state.company.symbol}    />
 												 </div>
 											  </div>
 											</div>

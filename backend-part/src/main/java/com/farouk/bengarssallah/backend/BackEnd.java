@@ -2,8 +2,6 @@ package com.farouk.bengarssallah.backend;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -67,14 +65,13 @@ public class BackEnd {
                                transaction.setCompany(c);
                                transaction.setPrice(c.getDay1Flow() + new BigDecimal((10+Math.random()*900)).setScale(2, RoundingMode.HALF_UP).doubleValue());
                                transactionRepository.save(transaction).subscribe(t -> {
-                                   System.out.println(t.toString());
+                                   
                                  });
                            }
                        });
 
                    });
                });
-            System.out.println("......");
 
         };  
     } 

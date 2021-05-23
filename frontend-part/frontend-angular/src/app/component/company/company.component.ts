@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Company } from '.../models/company.model';
-import { CompanyService } from '.../services/company.service';
+import { Company } from '../../models/company.model';
+import { CompanyService } from '../../services/company.service';
 
 
 @Component({
@@ -19,7 +19,7 @@ export class CompanyComponent implements OnInit {
   ngOnInit() {
 	  this.companyService.fetchC()
 		    .subscribe((res: any) => {
-					 this.companies = res.data;
+					 this.companies = res;
 				 });
   }
   

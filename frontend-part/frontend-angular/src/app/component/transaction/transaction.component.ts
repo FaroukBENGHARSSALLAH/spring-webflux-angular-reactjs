@@ -5,9 +5,9 @@ import * as am4core from '@amcharts/amcharts4/core';
 import * as am4charts from '@amcharts/amcharts4/charts';
 import am4themes_animated from '@amcharts/amcharts4/themes/animated';
 
-import { TransactionService } from '.../services/transaction.service';
+import { TransactionService } from '../../services/transaction.service';
 import { Observable } from 'rxjs/Observable';
-import { Price } from '.../models/price.model';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-transaction',
@@ -21,7 +21,7 @@ export class TransactionComponent  {
   private price: number;
   @Input('symbol')
   private symbol: string;
-  private priceObservable: Observable<Price>;
+  private priceObservable: Observable<Array<number>>;
 
   constructor(@Inject(PLATFORM_ID) private platformId, private zone: NgZone, private transactionService: TransactionService) {}
 
@@ -110,27 +110,24 @@ export class TransactionComponent  {
 			
 			let data = [];
 			data.push({ date: new Date(), value: this.price });
-			chart.data = data;
+			this.chart.data = data;
+			
+			this.priceObservable = this.transactionService.fetch(this.symbol);
 			
 			
-			priceObservable = this.transactionService.fetch(this.symbol);
-			
-			
-			quoteObservable.subscribe(cprice => {
-                      chart.addData([{ 
-					                  date:  cprice.date, 
-					                  value: cprice.price  
+			this.priceObservable.subscribe(cprice => {
+                      this.chart.addData([{ 
+					                  date:  new Date(), 
+					                  value: cprice  
 						                  }]); 
              });
     });
   }
 
   ngOnDestroy() {
-    this.browserOnly(() => {
-      if (this.chart) {
+	 if (this.chart) {
 	      this.chart.dispose();
-		  this.observer.complete();
+		  this.transactionService.terminate();
       }
-    });
   }
 }

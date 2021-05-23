@@ -2,9 +2,9 @@
 		 <br/><br/><br/><br/>
 		 <div  class="container"  >
 			 <div class="row"  >
-				   <div  class="col-md-1 col-lg-1"  >  </div>
-				   <div  class="col-md-10 col-lg-10"  >
-						 <div  *ngIf="etfs && !etf" class="card"  >
+				   <div  class="col-md-1 col-lg-1"   *ngIf="companies && !company"   >  </div>
+				   <div  class="col-md-10 col-lg-10"  *ngIf="companies && !company"   >
+						 <div   class="card"  >
 							<div  class="card-body"  >
 								<div>
 									<div class="table-reponsive">
@@ -34,40 +34,36 @@
 			                    </div>
 							 </div>
 						 </div>
-						 <div   *ngIf="company" >
-							<div  class="float-right">
-								      <button type="button"  class="btn btn-outline-info btn-sm"  (click)="back()" >
+				    </div>
+					<div  class="col-md-1 col-lg-1"   *ngIf="companies && !company"  >  </div>
+					
+					<div  class="col-md-12 col-lg-12"  *ngIf="company" >	 
+							  <div  class="float-right"   style="margin-left: 10px;"  >
+								      <button type="button"  class="btn btn-outline-info btn-sm"  style="margin-right: 15px;"   (click)="back()" >
 										 <i class="fa fa-step-backward" ></i>
 									 </button>
-								   </div><br/><br/>
-								    <div class="row"  >
-									     <div  class="col-md-6 col-lg-6"  >  
-										   <div class="card" >
-											  <div class="card-body">
-												<h5 class="card-title float-left">{{company.symbol}}</h5>
-												<br/>
+						      </div>
+							  <div class="card" >
+								<div class="card-body">
+										<h5 class="card-title float-left" style="margin-right: 6px;" >{{company.ticker}}</h5>
+										<div class="row" >
+										   <div class="col-md-4" >
 												<div class="float-left" >
 													<p class="card-text">Name : {{company.name}}</p>
 													<p class="card-text">Exchange : {{company.exchange}}</p>
 													<p class="card-text">Volume : {{company.volume}}  $</p>
-													<p class="card-text">1 Day Flow : <span   [ngClass]="(etf.day1Flow > 0) ? 'grennvl' : 'redvl'"  >{{company.day1Flow}} </span> $</p>
+													<p class="card-text">1 Day Flow :   <span   [ngClass]="company.day1Flow > 0 ? 'grennvl' : 'redvl'"  > {{(company.day1Flow < 0) ? '-' : ''}}  {{company.day1Flow}} </span> $</p>
 												</div>
-											  </div>
-											</div>
-										</div>
-										<div  class="col-md-6 col-lg-6"  > 
-												   <app-transaction></app-transaction>
-										</div>
+										  </div>
+										  <div class="col-md-8" > 
+										       <div  className="card-body"  >  
+											         <app-transaction  [price]=company.day1Flow   [symbol]=company.symbol   ></app-transaction> 
+											   </div>
+										  </div>
+									  </div>
 									</div>
-									<br/>
-								   <div  class="float-right">
-								      <button type="button"  class="btn btn-outline-info btn-sm"  (click)="back()" >
-										 <i class="fa fa-step-backward" ></i>
-									 </button>
-								   </div>
 							   </div>
-					</div>
-					<div  class="col-md-1 col-lg-1"  >  </div>
+
 			</div>
 		  </div>
 	</div>

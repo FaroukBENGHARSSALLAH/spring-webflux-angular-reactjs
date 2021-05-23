@@ -4,6 +4,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.stream.Stream;
 
+import org.springframework.data.mongodb.repository.Tailable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -106,7 +107,7 @@ public class ReactiveRestController {
     }
 
    
-
+    @Tailable
     @GetMapping(value = "/companies/transactions/stream/{symbol}",produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public Flux<Transaction> stream(@PathVariable String symbol){
         return companyService.findBySymbol(symbol).flatMapMany( c ->{
@@ -127,13 +128,8 @@ public class ReactiveRestController {
             return Flux.zip(interval, transactionFlux)
                     .map(data->{
                     	System.out.println("generating stream of " + data.getT2().getPrice());
-                    	transactionFlux.doOnCancel(() -> System.out.println("client terminated"));
-                    	transactionFlux.doOnTerminate(() -> System.out.println("client terminated"));
                         return data.getT2();
-                    }).doOnCancel(() -> System.out.println("client cancelled"))
-                      .doOnTerminate(() -> System.out.println("client terminated"))
-                      .doFinally(s -> System.out.println("client finsished"))
-                      .share();
+                    }).share();
         });
     }
 

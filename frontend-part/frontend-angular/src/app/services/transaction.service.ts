@@ -1,33 +1,37 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import * as EventSource from 'eventsource';
-import { Price } from '../models/price.model';
-import * as constants from '../utils/constants';
+import { Constants } from '../utils/constants';
 
 @Injectable()
 export class TransactionService {
 
-     fetch(symbol): Observable<Array<Price>> {
+     private eventSource: EventSource;
+	 
+     fetch(symbol): Observable<Array<number>> {
 			return Observable.create((observer) => {
 				      
-					  let eventSource = new EventSource(constants.HOST + constants.TRANSACTIONS_STREAM_URL + symbol);
-					  eventSource.onmessage = (event) => {
+					  this.eventSource = new EventSource(Constants.HOST + Constants.TRANSACTIONS_STREAM_URL + symbol);
+					  this.eventSource.onmessage = (event) => {
 						    let pricevalue = JSON.parse(event.data).price;
-						    date = new Date();
-						    observer.next(new Price(date, price));
+						    observer.next(pricevalue);
 					  };
-					  eventSource.onerror = (error) => {
-						    if(eventSource.readyState === 0) {
+					  this.eventSource.onerror = (error) => {
+						    if(this.eventSource.readyState === 0) {
 						       console.log('The stream has been closed by the server.');
-						       eventSource.close();
-						       observer.complete();
+						       this.eventSource.close();
 						        } 
 						    else {
 						      observer.error('EventSource error: ' + error);
+							  this.eventSource.close();
 						       }
 					  }
 			});
-    }  
-
+         }  
+		 
+		 
+	 terminate(): void {
+		   this.eventSource.close();
+	    }
 
 }
